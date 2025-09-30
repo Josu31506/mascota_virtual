@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mascota Virtual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <img src="assets/paw.svg" alt="Icono de huella" class="brand__icon" />
+        <h1 class="brand__title">Mi Mascota Virtual</h1>
+      </div>
+      <button class="refresh-button" id="refresh-status" type="button">
+        Actualizar estado
+      </button>
+    </header>
+
+    <main class="layout">
+      <section class="card status" aria-labelledby="status-title">
+        <header class="card__header">
+          <h2 id="status-title">Estado actual</h2>
+        </header>
+        <div class="card__content status__content">
+          <div class="status__pet">
+            <img
+              src="assets/pet-placeholder.svg"
+              alt="Mascota virtual"
+              class="status__pet-image"
+            />
+            <div class="status__pet-info">
+              <p class="status__pet-name" id="pet-name">Lumi</p>
+              <p class="status__pet-level" id="pet-level">Nivel 1 · Cachorro</p>
+            </div>
+          </div>
+
+          <dl class="status__metrics">
+            <div class="status__metric">
+              <dt>Hambre</dt>
+              <dd>
+                <progress id="hunger" value="60" max="100"></progress>
+                <span class="metric-value" id="hunger-label">60%</span>
+              </dd>
+            </div>
+            <div class="status__metric">
+              <dt>Energía</dt>
+              <dd>
+                <progress id="energy" value="80" max="100"></progress>
+                <span class="metric-value" id="energy-label">80%</span>
+              </dd>
+            </div>
+            <div class="status__metric">
+              <dt>Ánimo</dt>
+              <dd>
+                <progress id="mood" value="70" max="100"></progress>
+                <span class="metric-value" id="mood-label">70%</span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="card actions" aria-labelledby="actions-title">
+        <header class="card__header">
+          <h2 id="actions-title">Interacciones</h2>
+          <p class="card__subtitle">
+            Envía acciones a la mascota. Estas acciones se enviarán al backend
+            para obtener una respuesta actualizada.
+          </p>
+        </header>
+
+        <form class="actions__form" id="action-form">
+          <label class="form-control">
+            <span class="form-control__label">Selecciona una acción</span>
+            <select id="action" name="action" required>
+              <option value="feed">Dar de comer</option>
+              <option value="play">Jugar</option>
+              <option value="sleep">Ir a dormir</option>
+              <option value="train">Entrenar</option>
+            </select>
+          </label>
+
+          <label class="form-control">
+            <span class="form-control__label">Mensaje opcional</span>
+            <textarea
+              id="message"
+              name="message"
+              placeholder="Describe cómo quieres interactuar..."
+              rows="3"
+            ></textarea>
+          </label>
+
+          <button class="primary-button" type="submit">Enviar</button>
+        </form>
+      </section>
+
+      <section class="card log" aria-labelledby="log-title">
+        <header class="card__header">
+          <h2 id="log-title">Registro de actividad</h2>
+          <p class="card__subtitle">
+            Visualiza el historial de acciones y respuestas del backend.
+          </p>
+        </header>
+        <div class="card__content log__content">
+          <ul class="log__list" id="log-list">
+            <li class="log__item">
+              <time datetime="2024-04-18T10:30">10:30</time>
+              <p>La mascota se encuentra curiosa y quiere jugar.</p>
+            </li>
+            <li class="log__item">
+              <time datetime="2024-04-18T09:00">09:00</time>
+              <p>Le diste de comer. Hambre +30.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <template id="log-item-template">
+      <li class="log__item">
+        <time></time>
+        <p></p>
+      </li>
+    </template>
+
+    <footer class="app-footer">
+      <p>
+        ¿Listo para construir el backend? Documenta tus endpoints y
+        reemplaza las llamadas ficticias en <code>scripts.js</code>.
+      </p>
+    </footer>
+
+    <script src="scripts.js"></script>
+  </body>
+</html>
