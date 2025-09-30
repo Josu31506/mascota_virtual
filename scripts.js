@@ -3,19 +3,7 @@ const API_BASE_URL = "http://localhost:3000/api/pet";
 const statusElements = {
   name: document.querySelector("#pet-name"),
   level: document.querySelector("#pet-level"),
-  attributeSelector: document.querySelector("#attribute-selector"),
-  attributeTitle: document.querySelector("#attribute-title"),
-  attributeText: document.querySelector("#attribute-text"),
-  attributeMeter: document.querySelector("#attribute-meter"),
-  attributeProgress: document.querySelector("#attribute-progress"),
-  attributeProgressLabel: document.querySelector("#attribute-progress-label"),
-};
 
-let currentStatus = {
-  estadoEmocional: "Feliz",
-  hambre: 60,
-  felicidad: 85,
-  energia: 75,
 };
 
 const logList = document.querySelector("#log-list");
@@ -56,70 +44,6 @@ function renderStatus(status) {
     statusElements.level.textContent = `Nivel ${status.level}`;
   }
 
-  currentStatus = {
-    ...currentStatus,
-    ...status,
-  };
-
-  updateAttributeDisplay(statusElements.attributeSelector.value);
-}
-
-function updateAttributeDisplay(attributeKey) {
-  if (!attributeKey) return;
-
-  let title = "";
-  let description = "";
-  let numericValue = null;
-
-  switch (attributeKey) {
-    case "estadoEmocional":
-      title = "Estado emocional";
-      description =
-        currentStatus.estadoEmocional || "Sin información disponible";
-      break;
-    case "hambre":
-      title = "Nivel de hambre";
-      numericValue = currentStatus.hambre;
-      description = `Nivel actual: ${formatPercentage(numericValue)}`;
-      break;
-    case "felicidad":
-      title = "Nivel de felicidad";
-      numericValue = currentStatus.felicidad;
-      description = `Nivel actual: ${formatPercentage(numericValue)}`;
-      break;
-    case "energia":
-      title = "Nivel de energía";
-      numericValue = currentStatus.energia;
-      description = `Nivel actual: ${formatPercentage(numericValue)}`;
-      break;
-    default:
-      title = attributeKey;
-      description = "Sin información disponible";
-  }
-
-  statusElements.attributeTitle.textContent = title;
-  statusElements.attributeText.textContent = description;
-
-  if (typeof numericValue === "number" && !Number.isNaN(numericValue)) {
-    const clampedValue = clamp(numericValue, 0, 100);
-    statusElements.attributeProgress.value = clampedValue;
-    statusElements.attributeProgressLabel.textContent = `${clampedValue}%`;
-    statusElements.attributeMeter.hidden = false;
-  } else {
-    statusElements.attributeMeter.hidden = true;
-  }
-}
-
-function formatPercentage(value) {
-  if (typeof value !== "number" || Number.isNaN(value)) {
-    return "N/D";
-  }
-  const clampedValue = clamp(value, 0, 100);
-  return `${clampedValue}%`;
-}
-
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(value, max));
 }
 
 async function performAction(action, message) {
@@ -199,13 +123,6 @@ actionForm.addEventListener("submit", (event) => {
   actionForm.reset();
 });
 
-if (statusElements.attributeSelector) {
-  statusElements.attributeSelector.addEventListener("change", (event) => {
-    updateAttributeDisplay(event.target.value);
-  });
-
-  updateAttributeDisplay(statusElements.attributeSelector.value);
-}
 
 // Carga inicial
 appendToLog(new Date().toISOString(), "Bienvenido. Crea tu backend y comienza a jugar.");

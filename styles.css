@@ -124,69 +124,15 @@ a {
 
 .status__pet {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 1rem;
-}
 
-.status__pet-image {
-  width: 150px;
-  height: 150px;
-  border-radius: 40px;
-  box-shadow: 0 14px 28px rgba(80, 70, 216, 0.28);
-}
-
-.status__pet-info {
-  display: grid;
-  gap: 0.35rem;
 }
 
 .status__pet-name {
   margin: 0;
-  font-size: 1.6rem;
-  font-weight: 700;
 }
 
 .status__pet-level {
-  margin: 0;
-  color: var(--color-text-muted);
-}
 
-.status__selector {
-  display: grid;
-  gap: 1.25rem;
-}
-
-.status__dropdown select {
-  text-transform: capitalize;
-}
-
-.status__attribute {
-  display: grid;
-  gap: 0.65rem;
-  padding: 1.25rem;
-  border: 1px dashed rgba(112, 105, 250, 0.35);
-  border-radius: 20px;
-  background: rgba(112, 105, 250, 0.06);
-}
-
-.status__attribute-title {
-  margin: 0;
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-.status__attribute-value {
-  margin: 0;
-  font-size: 1.05rem;
-  color: var(--color-text);
-}
-
-.status__attribute-meter {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
   gap: 0.75rem;
 }
 
