@@ -11,7 +11,7 @@ const ui = {
   attributeProgressLabel: document.querySelector("#attribute-progress-label"),
   refreshButton: document.querySelector("#refresh-status"),
   actionForm: document.querySelector("#action-form"),
-  quickActionButtons: document.querySelectorAll(".side-panel--actions [data-action]"),
+  quickActionButtons: document.querySelectorAll(".mobile-actions [data-action]"),
   logList: document.querySelector("#log-list"),
   logItemTemplate: document.querySelector("#log-item-template"),
   clearLogButton: document.querySelector("#clear-log"),
