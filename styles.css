@@ -124,43 +124,15 @@ a {
 
 .status__pet {
   display: flex;
-  align-items: center;
-  gap: 1.25rem;
-}
 
-.status__pet-image {
-  width: 120px;
-  height: 120px;
-  border-radius: 32px;
-  box-shadow: 0 12px 24px rgba(80, 70, 216, 0.28);
 }
 
 .status__pet-name {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
 }
 
 .status__pet-level {
-  margin: 0.35rem 0 0;
-  color: var(--color-text-muted);
-}
 
-.status__metrics {
-  display: grid;
-  gap: 1rem;
-  margin: 0;
-}
-
-.status__metric dt {
-  font-weight: 600;
-}
-
-.status__metric dd {
-  margin: 0.35rem 0 0;
-  display: grid;
-  align-items: center;
-  grid-template-columns: 1fr auto;
   gap: 0.75rem;
 }
 

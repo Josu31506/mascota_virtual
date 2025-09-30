@@ -3,12 +3,7 @@ const API_BASE_URL = "http://localhost:3000/api/pet";
 const statusElements = {
   name: document.querySelector("#pet-name"),
   level: document.querySelector("#pet-level"),
-  hunger: document.querySelector("#hunger"),
-  hungerLabel: document.querySelector("#hunger-label"),
-  energy: document.querySelector("#energy"),
-  energyLabel: document.querySelector("#energy-label"),
-  mood: document.querySelector("#mood"),
-  moodLabel: document.querySelector("#mood-label"),
+
 };
 
 const logList = document.querySelector("#log-list");
@@ -49,17 +44,6 @@ function renderStatus(status) {
     statusElements.level.textContent = `Nivel ${status.level}`;
   }
 
-  updateMetric(status.hunger, statusElements.hunger, statusElements.hungerLabel);
-  updateMetric(status.energy, statusElements.energy, statusElements.energyLabel);
-  updateMetric(status.mood, statusElements.mood, statusElements.moodLabel);
-}
-
-function updateMetric(value, progressElement, labelElement) {
-  if (typeof value !== "number") return;
-
-  const clampedValue = Math.max(0, Math.min(value, 100));
-  progressElement.value = clampedValue;
-  labelElement.textContent = `${clampedValue}%`;
 }
 
 async function performAction(action, message) {
@@ -138,6 +122,7 @@ actionForm.addEventListener("submit", (event) => {
   performAction(action, message);
   actionForm.reset();
 });
+
 
 // Carga inicial
 appendToLog(new Date().toISOString(), "Bienvenido. Crea tu backend y comienza a jugar.");
