@@ -13,49 +13,103 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header class="app-header">
-      <div class="brand">
-        <img src="assets/paw.svg" alt="Icono de huella" class="brand__icon" />
-        <h1 class="brand__title">Mi Mascota Virtual</h1>
-      </div>
-      <button class="refresh-button" id="refresh-status" type="button">
-        Actualizar estado
-      </button>
-    </header>
-
-    <main class="layout">
-      <section class="card status" aria-labelledby="status-title">
-        <header class="card__header">
-          <h2 id="status-title">Estado actual</h2>
-        </header>
-        <div class="card__content status__content">
-          <div class="status__pet">
+    <div class="app-shell">
+      <header class="top-bar" aria-label="Barra de progreso de la mascota">
+        <div class="top-bar__cluster">
+          <div class="avatar-pill">
             <img
               src="assets/pet-placeholder.svg"
-              alt="Mascota virtual"
-              class="status__pet-image"
+              alt="Avatar de la mascota"
+              class="avatar-pill__image"
             />
-            <div class="status__pet-info">
-              <p class="status__pet-name" id="pet-name">Lumi</p>
-              <p class="status__pet-level" id="pet-level">Nivel 1 · Cachorro</p>
+            <div class="avatar-pill__meta">
+              <p id="pet-name" class="avatar-pill__name">Lumi</p>
+              <p id="pet-level" class="avatar-pill__level">Nivel 1 · Cachorro</p>
             </div>
           </div>
 
+          <div class="exp-card" aria-live="polite">
+            <p class="exp-card__label">Exp de hoy</p>
+            <div class="exp-card__progress">
+              <progress id="daily-exp" value="30" max="100"></progress>
+              <span id="daily-exp-label">30/100</span>
+            </div>
+          </div>
         </div>
-      </section>
 
-      <section class="card actions" aria-labelledby="actions-title">
-        <header class="card__header">
-          <h2 id="actions-title">Interacciones</h2>
-          <p class="card__subtitle">
-            Envía acciones a la mascota. Estas acciones se enviarán al backend
-            para obtener una respuesta actualizada.
-          </p>
-        </header>
+        <div class="top-bar__cluster top-bar__cluster--right">
+          <div class="top-bar__timer" id="session-timer">23:45:12</div>
+          <button class="icon-button" type="button" aria-label="Abrir chat" id="open-chat">
+            <span aria-hidden="true">💬</span>
+          </button>
+          <button class="icon-button" type="button" aria-label="Abrir ajustes">
+            <span aria-hidden="true">⚙️</span>
+          </button>
+        </div>
+      </header>
 
-        <form class="actions__form" id="action-form">
-          <label class="form-control">
-            <span class="form-control__label">Selecciona una acción</span>
+      <main class="main-stage">
+        <aside class="side-panel" aria-label="Accesos rápidos">
+          <button class="side-panel__button" type="button">
+            <span aria-hidden="true">🐾</span>
+            Pet-sitting
+          </button>
+          <button class="side-panel__button" type="button">
+            <span aria-hidden="true">📝</span>
+            Historial
+          </button>
+          <button class="side-panel__button" type="button">
+            <span aria-hidden="true">🛒</span>
+            Tienda
+          </button>
+        </aside>
+
+        <section class="pet-stage" aria-label="Escenario principal de la mascota">
+          <div class="pet-stage__scene">
+            <div class="pet-stage__window" aria-hidden="true"></div>
+            <img
+              src="assets/pet-placeholder.svg"
+              alt="Mascota virtual"
+              class="pet-stage__pet"
+            />
+          </div>
+
+          <section class="attribute-card" aria-labelledby="attribute-title">
+            <header class="attribute-card__header">
+              <h2 id="attribute-title">Estado emocional</h2>
+              <button class="text-button" type="button" id="refresh-status">
+                Actualizar
+              </button>
+              <label class="attribute-card__selector" for="attribute-selector">
+                <span class="attribute-card__selector-label">Atributo</span>
+                <select id="attribute-selector" name="attribute-selector">
+                  <option value="estadoEmocional">Estado emocional</option>
+                  <option value="hambre">Hambre</option>
+                  <option value="felicidad">Felicidad</option>
+                  <option value="energia">Energía</option>
+                </select>
+              </label>
+            </header>
+            <p class="attribute-card__value" id="attribute-text">Feliz</p>
+            <div class="attribute-card__meter" id="attribute-meter" hidden>
+              <progress id="attribute-progress" value="75" max="100"></progress>
+              <span class="attribute-card__meter-label" id="attribute-progress-label">75%</span>
+            </div>
+          </section>
+        </section>
+
+        <aside class="side-panel side-panel--actions" aria-label="Acciones rápidas">
+          <button class="side-panel__button" data-action="feed" type="button">🍎 Dar de comer</button>
+          <button class="side-panel__button" data-action="play" type="button">🎲 Jugar</button>
+          <button class="side-panel__button" data-action="sleep" type="button">🌙 Dormir</button>
+          <button class="side-panel__button" data-action="train" type="button">🏋️ Entrenar</button>
+        </aside>
+      </main>
+
+      <section class="bottom-dock" aria-label="Panel de interacción con la mascota">
+        <form class="dock-form" id="action-form">
+          <label class="dock-form__control" for="action">
+            <span class="dock-form__label">Acción</span>
             <select id="action" name="action" required>
               <option value="feed">Dar de comer</option>
               <option value="play">Jugar</option>
@@ -63,56 +117,48 @@
               <option value="train">Entrenar</option>
             </select>
           </label>
-
-          <label class="form-control">
-            <span class="form-control__label">Mensaje opcional</span>
-            <textarea
+          <label class="dock-form__control" for="message">
+            <span class="dock-form__label">Mensaje</span>
+            <input
               id="message"
               name="message"
-              placeholder="Describe cómo quieres interactuar..."
-              rows="3"
-            ></textarea>
+              type="text"
+              placeholder="Escribe algo para tu mascota"
+            />
           </label>
-
           <button class="primary-button" type="submit">Enviar</button>
         </form>
-      </section>
 
-      <section class="card log" aria-labelledby="log-title">
-        <header class="card__header">
-          <h2 id="log-title">Registro de actividad</h2>
-          <p class="card__subtitle">
-            Visualiza el historial de acciones y respuestas del backend.
-          </p>
-        </header>
-        <div class="card__content log__content">
-          <ul class="log__list" id="log-list">
-            <li class="log__item">
+        <section class="dock-log" aria-labelledby="log-title">
+          <header class="dock-log__header">
+            <h2 id="log-title">Registro</h2>
+            <button class="text-button" type="button" id="clear-log">Limpiar</button>
+          </header>
+          <ul class="dock-log__list" id="log-list">
+            <li>
               <time datetime="2024-04-18T10:30">10:30</time>
               <p>La mascota se encuentra curiosa y quiere jugar.</p>
             </li>
-            <li class="log__item">
+            <li>
               <time datetime="2024-04-18T09:00">09:00</time>
               <p>Le diste de comer. Hambre +30.</p>
             </li>
           </ul>
-        </div>
+        </section>
       </section>
-    </main>
+
+      <footer class="app-footer">
+        ¿Listo para construir el backend? Documenta tus endpoints y reemplaza las
+        llamadas ficticias en <code>scripts.js</code>.
+      </footer>
+    </div>
 
     <template id="log-item-template">
-      <li class="log__item">
+      <li>
         <time></time>
         <p></p>
       </li>
     </template>
-
-    <footer class="app-footer">
-      <p>
-        ¿Listo para construir el backend? Documenta tus endpoints y
-        reemplaza las llamadas ficticias en <code>scripts.js</code>.
-      </p>
-    </footer>
 
     <script src="scripts.js"></script>
   </body>
