@@ -25,6 +25,7 @@ npm run start
 
 3. Escanea el código QR con Expo Go o abre el proyecto en un emulador desde la terminal.
 
+
 ## Endpoints esperados
 
 El frontend espera que el backend exponga los siguientes endpoints REST:
