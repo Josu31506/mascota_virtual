@@ -48,119 +48,216 @@
         </div>
       </header>
 
-      <main
-        class="mobile-main"
-        aria-label="Interfaz principal para cuidar de la mascota virtual"
-      >
-        <section class="stage-wrapper">
-          <section class="pet-stage" aria-label="Escenario principal de la mascota">
-            <div class="pet-stage__scene">
-              <div class="pet-stage__window" aria-hidden="true"></div>
-              <img
-                src="assets/pet-placeholder.svg"
-                alt="Mascota virtual"
-                class="pet-stage__pet"
-              />
+      <main class="main-stage">
+        <aside class="side-panel" aria-label="Accesos rápidos">
+          <button class="side-panel__button" type="button">
+            <span aria-hidden="true">🐾</span>
+            Pet-sitting
+          </button>
+          <button class="side-panel__button" type="button">
+            <span aria-hidden="true">📝</span>
+            Historial
+          </button>
+          <button class="side-panel__button" type="button">
+            <span aria-hidden="true">🛒</span>
+            Tienda
+          </button>
+        </aside>
+
+        <section class="pet-stage" aria-label="Escenario principal de la mascota">
+          <div class="pet-stage__scene">
+            <div class="pet-stage__window" aria-hidden="true"></div>
+            <img
+              src="assets/pet-placeholder.svg"
+              alt="Mascota virtual"
+              class="pet-stage__pet"
+            />
+          </div>
+
+          <section
+            class="attribute-card"
+            aria-labelledby="attribute-title"
+            id="attribute-panel"
+            data-sheet="attribute"
+            aria-hidden="false"
+          >
+            <header class="attribute-card__header">
+              <h2 id="attribute-title">Estado emocional</h2>
+              <button class="text-button" type="button" id="refresh-status">
+                Actualizar
+              </button>
+              <label class="attribute-card__selector" for="attribute-selector">
+                <span class="attribute-card__selector-label">Atributo</span>
+                <select id="attribute-selector" name="attribute-selector">
+                  <option value="estadoEmocional">Estado emocional</option>
+                  <option value="hambre">Hambre</option>
+                  <option value="felicidad">Felicidad</option>
+                  <option value="energia">Energía</option>
+                </select>
+              </label>
+            </header>
+            <p class="attribute-card__value" id="attribute-text">Feliz</p>
+            <div class="attribute-card__meter" id="attribute-meter" hidden>
+              <progress id="attribute-progress" value="75" max="100"></progress>
+              <span class="attribute-card__meter-label" id="attribute-progress-label">75%</span>
             </div>
           </section>
         </section>
 
-        <nav class="mobile-actions" aria-label="Acciones rápidas">
-          <button class="mobile-actions__button" data-action="feed" type="button">
-            <span aria-hidden="true">🍎</span>
-            Dar de comer
+        <aside
+          class="side-panel side-panel--actions"
+          aria-label="Acciones rápidas"
+          data-quick-actions
+        >
+          <button
+            class="side-panel__button"
+            data-action="feed"
+            data-action-button
+            type="button"
+          >
+            🍎 Dar de comer
           </button>
-          <button class="mobile-actions__button" data-action="play" type="button">
-            <span aria-hidden="true">🎲</span>
-            Jugar
+          <button
+            class="side-panel__button"
+            data-action="play"
+            data-action-button
+            type="button"
+          >
+            🎲 Jugar
           </button>
-          <button class="mobile-actions__button" data-action="sleep" type="button">
-            <span aria-hidden="true">🌙</span>
-            Dormir
+          <button
+            class="side-panel__button"
+            data-action="sleep"
+            data-action-button
+            type="button"
+          >
+            🌙 Dormir
           </button>
-          <button class="mobile-actions__button" data-action="train" type="button">
-            <span aria-hidden="true">🏋️</span>
-            Entrenar
+          <button
+            class="side-panel__button"
+            data-action="train"
+            data-action-button
+            type="button"
+          >
+            🏋️ Entrenar
           </button>
-        </nav>
+        </aside>
+      </main>
+
+      <section
+        class="mobile-quick-actions"
+        id="mobile-quick-actions"
+        aria-label="Acciones rápidas móviles"
+        data-quick-actions
+      >
+        <h2 class="mobile-quick-actions__title">Acciones rápidas</h2>
+        <div class="mobile-quick-actions__grid">
+          <button
+            class="mobile-quick-actions__button"
+            data-action="feed"
+            data-action-button
+            type="button"
+          >
+            🍎 Dar de comer
+          </button>
+          <button
+            class="mobile-quick-actions__button"
+            data-action="play"
+            data-action-button
+            type="button"
+          >
+            🎲 Jugar
+          </button>
+          <button
+            class="mobile-quick-actions__button"
+            data-action="sleep"
+            data-action-button
+            type="button"
+          >
+            🌙 Dormir
+          </button>
+          <button
+            class="mobile-quick-actions__button"
+            data-action="train"
+            data-action-button
+            type="button"
+          >
+            🏋️ Entrenar
+          </button>
+        </div>
+      </section>
+
+      <div
+        class="mobile-sheet-toggles"
+        role="group"
+        aria-label="Paneles móviles"
+      >
+        <button
+          class="sheet-toggle"
+          type="button"
+          data-sheet-toggle="attribute"
+          aria-expanded="false"
+          aria-controls="attribute-panel"
+        >
+          Estado
+        </button>
+        <button
+          class="sheet-toggle"
+          type="button"
+          data-sheet-toggle="log"
+          aria-expanded="false"
+          aria-controls="log-panel"
+        >
+          Registro
+        </button>
+      </div>
+
+      <section class="bottom-dock" aria-label="Panel de interacción con la mascota">
+        <form class="dock-form" id="action-form">
+          <label class="dock-form__control" for="action">
+            <span class="dock-form__label">Acción</span>
+            <select id="action" name="action" required>
+              <option value="feed">Dar de comer</option>
+              <option value="play">Jugar</option>
+              <option value="sleep">Ir a dormir</option>
+              <option value="train">Entrenar</option>
+            </select>
+          </label>
+          <label class="dock-form__control" for="message">
+            <span class="dock-form__label">Mensaje</span>
+            <input
+              id="message"
+              name="message"
+              type="text"
+              placeholder="Escribe algo para tu mascota"
+            />
+          </label>
+          <button class="primary-button" type="submit">Enviar</button>
+        </form>
 
         <section
-          class="mobile-bottom-sheet"
-          aria-label="Estado de la mascota y registro de acciones"
+          class="dock-log"
+          aria-labelledby="log-title"
+          id="log-panel"
+          data-sheet="log"
+          aria-hidden="false"
         >
-          <div class="mobile-bottom-sheet__handle" aria-hidden="true"></div>
-          <div class="mobile-bottom-sheet__stack">
-            <section class="attribute-card" aria-labelledby="attribute-title">
-              <header class="attribute-card__header">
-                <h2 id="attribute-title">Estado emocional</h2>
-                <button class="text-button" type="button" id="refresh-status">
-                  Actualizar
-                </button>
-                <label class="attribute-card__selector" for="attribute-selector">
-                  <span class="attribute-card__selector-label">Atributo</span>
-                  <select id="attribute-selector" name="attribute-selector">
-                    <option value="estadoEmocional">Estado emocional</option>
-                    <option value="hambre">Hambre</option>
-                    <option value="felicidad">Felicidad</option>
-                    <option value="energia">Energía</option>
-                  </select>
-                </label>
-              </header>
-              <p class="attribute-card__value" id="attribute-text">Feliz</p>
-              <div class="attribute-card__meter" id="attribute-meter" hidden>
-                <progress id="attribute-progress" value="75" max="100"></progress>
-                <span class="attribute-card__meter-label" id="attribute-progress-label"
-                  >75%</span
-                >
-              </div>
-            </section>
-
-            <section class="mobile-panel" aria-labelledby="action-form-title">
-              <header class="mobile-panel__header">
-                <h2 id="action-form-title">Interacciones</h2>
-              </header>
-              <form class="dock-form" id="action-form">
-                <label class="dock-form__control" for="action">
-                  <span class="dock-form__label">Acción</span>
-                  <select id="action" name="action" required>
-                    <option value="feed">Dar de comer</option>
-                    <option value="play">Jugar</option>
-                    <option value="sleep">Ir a dormir</option>
-                    <option value="train">Entrenar</option>
-                  </select>
-                </label>
-                <label class="dock-form__control" for="message">
-                  <span class="dock-form__label">Mensaje</span>
-                  <input
-                    id="message"
-                    name="message"
-                    type="text"
-                    placeholder="Escribe algo para tu mascota"
-                  />
-                </label>
-                <button class="primary-button" type="submit">Enviar</button>
-              </form>
-            </section>
-
-            <section class="mobile-panel" aria-labelledby="log-title">
-              <header class="mobile-panel__header">
-                <h2 id="log-title">Registro</h2>
-                <button class="text-button" type="button" id="clear-log">Limpiar</button>
-              </header>
-              <ul class="dock-log__list" id="log-list">
-                <li>
-                  <time datetime="2024-04-18T10:30">10:30</time>
-                  <p>La mascota se encuentra curiosa y quiere jugar.</p>
-                </li>
-                <li>
-                  <time datetime="2024-04-18T09:00">09:00</time>
-                  <p>Le diste de comer. Hambre +30.</p>
-                </li>
-              </ul>
-            </section>
-          </div>
+          <header class="dock-log__header">
+            <h2 id="log-title">Registro</h2>
+            <button class="text-button" type="button" id="clear-log">Limpiar</button>
+          </header>
+          <ul class="dock-log__list" id="log-list">
+            <li>
+              <time datetime="2024-04-18T10:30">10:30</time>
+              <p>La mascota se encuentra curiosa y quiere jugar.</p>
+            </li>
+            <li>
+              <time datetime="2024-04-18T09:00">09:00</time>
+              <p>Le diste de comer. Hambre +30.</p>
+            </li>
+          </ul>
         </section>
-      </main>
+      </section>
 
       <footer class="app-footer">
         ¿Listo para construir el backend? Documenta tus endpoints y reemplaza las
