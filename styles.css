@@ -41,17 +41,16 @@ textarea {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
+  padding: 0 clamp(0.75rem, 3vw, 1.25rem) clamp(8.5rem, 32vh, 12rem);
 }
 
 .top-bar {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.85rem clamp(1.25rem, 4vw, 2.5rem);
+
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(8px);
-  box-shadow: 0 12px 30px rgba(82, 59, 42, 0.12);
+  box-shadow: 0 8px 22px rgba(82, 59, 42, 0.12);
   position: sticky;
   top: 0;
   z-index: 20;
@@ -59,8 +58,9 @@ textarea {
 
 .top-bar__cluster {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 1.25rem;
+  gap: 0.85rem;
 }
 
 .top-bar__cluster--right {
@@ -120,7 +120,7 @@ textarea {
 }
 
 progress {
-  width: 140px;
+  width: 100%;
   height: 10px;
   border-radius: 999px;
   overflow: hidden;
@@ -151,8 +151,8 @@ progress::-moz-progress-bar {
 }
 
 .icon-button {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: none;
   background: rgba(244, 162, 97, 0.2);
@@ -171,39 +171,12 @@ progress::-moz-progress-bar {
 
 .mobile-main {
   flex: 1;
-  width: min(560px, 100%);
-  margin: 0 auto;
-  padding: 0 clamp(1rem, 5vw, 2rem) calc(5.5rem + env(safe-area-inset-bottom));
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
 
-.stage-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
-.mobile-actions {
-  position: sticky;
-  bottom: calc(env(safe-area-inset-bottom) + 1.25rem);
-  align-self: center;
-  width: min(520px, 100%);
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 22px 40px rgba(82, 59, 42, 0.2);
-  backdrop-filter: blur(10px);
-  z-index: 10;
 }
 
 .mobile-actions__button {
   border: none;
-  border-radius: 18px;
-  padding: 0.85rem 0.5rem;
+
   background: var(--color-surface);
   box-shadow: var(--shadow-soft);
   font-weight: 600;
@@ -212,17 +185,14 @@ progress::-moz-progress-bar {
   gap: 0.35rem;
   justify-items: center;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  font-size: 0.9rem;
+
 }
 
 .mobile-actions__button span {
   font-size: 1.35rem;
 }
 
-.mobile-actions__button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 18px 28px rgba(139, 105, 79, 0.2);
+
 }
 
 .pet-stage {
@@ -231,11 +201,12 @@ progress::-moz-progress-bar {
   background: var(--color-stage);
   border-radius: var(--radius-large);
   box-shadow: var(--shadow-soft);
-  padding: clamp(1.75rem, 5vw, 2.5rem);
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: clamp(1.5rem, 4vw, 2rem);
+  min-height: clamp(380px, 62vh, 540px);
 }
 
 .pet-stage__scene {
@@ -270,17 +241,19 @@ progress::-moz-progress-bar {
 }
 
 .attribute-card {
+
   background: var(--color-surface);
-  border-radius: 22px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow-soft);
+  border-radius: 28px 28px 22px 22px;
+  padding: 1.35rem;
+  box-shadow: 0 -12px 25px rgba(82, 59, 42, 0.12), var(--shadow-soft);
   display: grid;
   gap: 1rem;
 }
 
 .attribute-card__header {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr;
+  justify-items: start;
   align-items: center;
   gap: 0.75rem;
 }
@@ -345,46 +318,14 @@ progress::-moz-progress-bar {
   background: rgba(231, 111, 81, 0.15);
 }
 
-.mobile-bottom-sheet {
-  position: relative;
-  background: rgba(255, 255, 255, 0.94);
-  border-radius: 28px 28px 0 0;
-  box-shadow: 0 -6px 40px rgba(82, 59, 42, 0.18);
-  padding: clamp(1.25rem, 5vw, 2rem);
-}
 
-.mobile-bottom-sheet__handle {
-  width: 72px;
-  height: 6px;
-  background: rgba(82, 59, 42, 0.15);
-  border-radius: 999px;
-  margin: 0 auto 1.25rem;
-}
-
-.mobile-bottom-sheet__stack {
-  display: grid;
-  gap: 1.25rem;
-}
-
-.mobile-panel {
-  background: var(--color-surface);
-  border-radius: 22px;
-  box-shadow: var(--shadow-soft);
-  padding: 1.25rem;
-  display: grid;
-  gap: 1rem;
-}
-
-.mobile-panel__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .dock-form {
   display: grid;
   gap: 1rem;
   grid-template-columns: 1fr;
+
 }
 
 .dock-form__control {
@@ -406,6 +347,7 @@ progress::-moz-progress-bar {
   padding: 0.75rem 1rem;
   background: #fffaf5;
   font-size: 1rem;
+  min-height: 52px;
 }
 
 .primary-button {
@@ -417,6 +359,7 @@ progress::-moz-progress-bar {
   color: #fff;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 52px;
 }
 
 .primary-button:hover {
@@ -447,6 +390,7 @@ progress::-moz-progress-bar {
   display: grid;
   gap: 0.35rem;
   box-shadow: inset 0 0 0 1px rgba(234, 217, 201, 0.8);
+  min-height: 56px;
 }
 
 .dock-log__list time {
@@ -461,42 +405,41 @@ progress::-moz-progress-bar {
 
 .app-footer {
   text-align: center;
-  padding: 1.5rem 2rem 3rem;
+  padding: 1rem 0 2rem;
   color: var(--color-muted);
   font-size: 0.95rem;
 }
 
-@media (max-width: 768px) {
-  .top-bar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
   }
 
-  .top-bar__cluster--right {
-    justify-content: flex-end;
+  .dock-form {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    align-items: end;
   }
-}
 
-@media (max-width: 520px) {
-  .app-shell {
+  .dock-log {
+    border-radius: 20px;
+    padding: 1.25rem;
+  }
+
+  .side-panel--actions {
+    position: static;
+    inset: auto;
+    display: grid;
     gap: 1rem;
+    padding: 0;
+    background: transparent;
+    backdrop-filter: none;
+    border-radius: 24px;
+    box-shadow: none;
+    flex: 0 0 220px;
   }
 
-  .mobile-main {
-    padding-bottom: calc(6.5rem + env(safe-area-inset-bottom));
+
   }
 
-  .mobile-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .side-panel--actions .side-panel__button::first-letter {
+    font-size: 1.3rem;
   }
 
-  .attribute-card__header {
-    grid-template-columns: 1fr;
-    justify-items: start;
-  }
-
-  progress {
-    width: 100%;
-  }
 }
