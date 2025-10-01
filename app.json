@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Mascota Virtual",
+    "slug": "mascota-virtual",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "jsEngine": "hermes",
+    "extra": {
+      "apiBaseUrl": "http://localhost:3000/api/pet"
+    },
+    "assetBundlePatterns": ["**/*"]
+  }
+}
