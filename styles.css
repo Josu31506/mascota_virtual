@@ -214,45 +214,46 @@ progress::-moz-progress-bar {
   text-align: center;
 }
 
-.mobile-quick-actions {
+.mobile-actions {
   display: none;
+  grid-column: 1 / -1;
+  gap: 1rem;
 }
 
-.mobile-quick-actions__title {
+.mobile-actions__title {
   margin: 0;
   font-size: 1.05rem;
   font-weight: 700;
-  text-align: center;
 }
 
-.mobile-quick-actions__grid {
+.mobile-actions__grid {
   display: grid;
   gap: 0.75rem;
 }
 
-.mobile-quick-actions__button {
+.mobile-actions__button {
   border: none;
   border-radius: 20px;
-  padding: 0.9rem 1rem;
+  padding: 0.95rem 1.1rem;
   background: var(--color-surface);
   box-shadow: var(--shadow-soft);
   font-weight: 600;
   color: var(--color-text);
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  justify-content: flex-start;
+  gap: 0.75rem;
+  justify-content: center;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   text-align: center;
 }
 
-.mobile-quick-actions__button:hover {
+.mobile-actions__button:hover {
   transform: translateY(-3px);
   box-shadow: 0 18px 30px rgba(139, 105, 79, 0.18);
 }
 
-.mobile-quick-actions__button:focus-visible,
+.mobile-actions__button:focus-visible,
 .sheet-toggle:focus-visible {
   outline: 3px solid rgba(244, 162, 97, 0.7);
   outline-offset: 2px;
@@ -523,6 +524,18 @@ progress::-moz-progress-bar {
   .side-panel--actions {
     display: none;
   }
+
+  .mobile-actions {
+    display: grid;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.82);
+    border-radius: 20px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .mobile-actions__grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
 }
 
 @media (max-width: 840px) {
@@ -551,23 +564,14 @@ progress::-moz-progress-bar {
     padding-bottom: 6rem;
   }
 
-  .mobile-quick-actions {
-    display: grid;
-    gap: 1rem;
-    width: min(1100px, 92vw);
-    margin: 0 auto;
-    background: rgba(255, 255, 255, 0.92);
-    border-radius: var(--radius-large);
-    padding: 1.25rem;
-    box-shadow: var(--shadow-soft);
+  .mobile-actions {
+    padding: 0;
+    background: none;
+    box-shadow: none;
   }
 
-  .mobile-quick-actions__grid {
+  .mobile-actions__grid {
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  }
-
-  .mobile-quick-actions__button {
-    justify-content: center;
   }
 
   .mobile-sheet-toggles {
@@ -616,4 +620,9 @@ progress::-moz-progress-bar {
   .dock-form {
     grid-template-columns: 1fr;
   }
+
+  .mobile-actions__grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
 }
+
