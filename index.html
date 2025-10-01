@@ -74,7 +74,13 @@
             />
           </div>
 
-          <section class="attribute-card" aria-labelledby="attribute-title">
+          <section
+            class="attribute-card"
+            aria-labelledby="attribute-title"
+            id="attribute-panel"
+            data-sheet="attribute"
+            aria-hidden="false"
+          >
             <header class="attribute-card__header">
               <h2 id="attribute-title">Estado emocional</h2>
               <button class="text-button" type="button" id="refresh-status">
@@ -98,13 +104,113 @@
           </section>
         </section>
 
-        <aside class="side-panel side-panel--actions" aria-label="Acciones rápidas">
-          <button class="side-panel__button" data-action="feed" type="button">🍎 Dar de comer</button>
-          <button class="side-panel__button" data-action="play" type="button">🎲 Jugar</button>
-          <button class="side-panel__button" data-action="sleep" type="button">🌙 Dormir</button>
-          <button class="side-panel__button" data-action="train" type="button">🏋️ Entrenar</button>
+        <aside
+          class="side-panel side-panel--actions"
+          aria-label="Acciones rápidas"
+          data-quick-actions
+        >
+          <button
+            class="side-panel__button"
+            data-action="feed"
+            data-action-button
+            type="button"
+          >
+            🍎 Dar de comer
+          </button>
+          <button
+            class="side-panel__button"
+            data-action="play"
+            data-action-button
+            type="button"
+          >
+            🎲 Jugar
+          </button>
+          <button
+            class="side-panel__button"
+            data-action="sleep"
+            data-action-button
+            type="button"
+          >
+            🌙 Dormir
+          </button>
+          <button
+            class="side-panel__button"
+            data-action="train"
+            data-action-button
+            type="button"
+          >
+            🏋️ Entrenar
+          </button>
         </aside>
       </main>
+
+      <section
+        class="mobile-quick-actions"
+        id="mobile-quick-actions"
+        aria-label="Acciones rápidas móviles"
+        data-quick-actions
+      >
+        <h2 class="mobile-quick-actions__title">Acciones rápidas</h2>
+        <div class="mobile-quick-actions__grid">
+          <button
+            class="mobile-quick-actions__button"
+            data-action="feed"
+            data-action-button
+            type="button"
+          >
+            🍎 Dar de comer
+          </button>
+          <button
+            class="mobile-quick-actions__button"
+            data-action="play"
+            data-action-button
+            type="button"
+          >
+            🎲 Jugar
+          </button>
+          <button
+            class="mobile-quick-actions__button"
+            data-action="sleep"
+            data-action-button
+            type="button"
+          >
+            🌙 Dormir
+          </button>
+          <button
+            class="mobile-quick-actions__button"
+            data-action="train"
+            data-action-button
+            type="button"
+          >
+            🏋️ Entrenar
+          </button>
+        </div>
+      </section>
+
+      <div
+        class="mobile-sheet-toggles"
+        role="group"
+        aria-label="Paneles móviles"
+      >
+        <button
+          class="sheet-toggle"
+          type="button"
+          data-sheet-toggle="attribute"
+          aria-expanded="false"
+          aria-controls="attribute-panel"
+        >
+          Estado
+        </button>
+        <button
+          class="sheet-toggle"
+          type="button"
+          data-sheet-toggle="log"
+          aria-expanded="false"
+          aria-controls="log-panel"
+        >
+          Registro
+        </button>
+      </div>
 
       <section class="bottom-dock" aria-label="Panel de interacción con la mascota">
         <form class="dock-form" id="action-form">
@@ -129,7 +235,13 @@
           <button class="primary-button" type="submit">Enviar</button>
         </form>
 
-        <section class="dock-log" aria-labelledby="log-title">
+        <section
+          class="dock-log"
+          aria-labelledby="log-title"
+          id="log-panel"
+          data-sheet="log"
+          aria-hidden="false"
+        >
           <header class="dock-log__header">
             <h2 id="log-title">Registro</h2>
             <button class="text-button" type="button" id="clear-log">Limpiar</button>

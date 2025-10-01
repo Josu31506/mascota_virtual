@@ -11,7 +11,7 @@ const ui = {
   attributeProgressLabel: document.querySelector("#attribute-progress-label"),
   refreshButton: document.querySelector("#refresh-status"),
   actionForm: document.querySelector("#action-form"),
-  quickActionButtons: document.querySelectorAll(".side-panel--actions [data-action]"),
+  quickActionButtons: document.querySelectorAll("[data-action-button]"),
   logList: document.querySelector("#log-list"),
   logItemTemplate: document.querySelector("#log-item-template"),
   clearLogButton: document.querySelector("#clear-log"),
@@ -19,7 +19,28 @@ const ui = {
   dailyExp: document.querySelector("#daily-exp"),
   dailyExpLabel: document.querySelector("#daily-exp-label"),
   sessionTimer: document.querySelector("#session-timer"),
+  sheetToggles: document.querySelectorAll("[data-sheet-toggle]"),
+  sheets: document.querySelectorAll("[data-sheet]"),
+  sheetToggleWrapper: document.querySelector(".mobile-sheet-toggles"),
 };
+
+const sheetElements = new Map(
+  Array.from(ui.sheets || []).map((sheet) => [sheet.dataset.sheet, sheet])
+);
+
+const sheetToggleButtons = new Map(
+  Array.from(ui.sheetToggles || []).map((button) => [
+    button.dataset.sheetToggle,
+    button,
+  ])
+);
+
+const sheetMediaQuery =
+  typeof window !== "undefined" && typeof window.matchMedia === "function"
+    ? window.matchMedia("(max-width: 840px)")
+    : null;
+
+let isSheetMode = false;
 
 let currentStatus = {
   estadoEmocional: "Feliz",
@@ -228,6 +249,107 @@ function appendToLog(timestamp, message) {
   ui.logList.prepend(logItem);
 }
 
+function initializeSheets() {
+  if (!sheetElements.size) {
+    return;
+  }
+
+  if (ui.sheetToggleWrapper) {
+    ui.sheetToggleWrapper.hidden = true;
+  }
+
+  sheetToggleButtons.forEach((button) => {
+    button.hidden = true;
+  });
+
+  if (!sheetMediaQuery) {
+    return;
+  }
+
+  handleSheetMode(sheetMediaQuery.matches);
+
+  const handleChange = (event) => {
+    handleSheetMode(event.matches);
+  };
+
+  if (typeof sheetMediaQuery.addEventListener === "function") {
+    sheetMediaQuery.addEventListener("change", handleChange);
+  } else if (typeof sheetMediaQuery.addListener === "function") {
+    sheetMediaQuery.addListener(handleChange);
+  }
+}
+
+function handleSheetMode(matches) {
+  isSheetMode = matches;
+
+  if (ui.sheetToggleWrapper) {
+    ui.sheetToggleWrapper.hidden = !matches;
+  }
+
+  sheetToggleButtons.forEach((button) => {
+    button.hidden = !matches;
+    button.setAttribute("aria-expanded", "false");
+  });
+
+  sheetElements.forEach((sheet, key) => {
+    if (matches) {
+      sheet.classList.add("as-sheet");
+      closeSheet(key);
+    } else {
+      sheet.classList.remove("as-sheet", "is-open");
+      sheet.removeAttribute("aria-hidden");
+    }
+  });
+}
+
+function openSheet(sheetName) {
+  const sheet = sheetElements.get(sheetName);
+  if (!sheet) return;
+
+  sheet.classList.add("is-open");
+  sheet.setAttribute("aria-hidden", "false");
+
+  const toggle = sheetToggleButtons.get(sheetName);
+  toggle?.setAttribute("aria-expanded", "true");
+}
+
+function closeSheet(sheetName) {
+  const sheet = sheetElements.get(sheetName);
+  if (!sheet) return;
+
+  sheet.classList.remove("is-open");
+
+  if (isSheetMode) {
+    sheet.setAttribute("aria-hidden", "true");
+  } else {
+    sheet.removeAttribute("aria-hidden");
+  }
+
+  const toggle = sheetToggleButtons.get(sheetName);
+  toggle?.setAttribute("aria-expanded", "false");
+}
+
+function toggleSheet(sheetName) {
+  if (!isSheetMode) return;
+
+  const sheet = sheetElements.get(sheetName);
+  if (!sheet) return;
+
+  const shouldOpen = !sheet.classList.contains("is-open");
+
+  sheetElements.forEach((_, key) => {
+    if (key !== sheetName) {
+      closeSheet(key);
+    }
+  });
+
+  if (shouldOpen) {
+    openSheet(sheetName);
+  } else {
+    closeSheet(sheetName);
+  }
+}
+
 function bindEvents() {
   ui.attributeSelector?.addEventListener("change", (event) => {
     updateAttributeDisplay(event.target.value);
@@ -269,6 +391,15 @@ function bindEvents() {
     });
   });
 
+  ui.sheetToggles?.forEach((button) => {
+    const sheetName = button.dataset.sheetToggle;
+    if (!sheetName) return;
+
+    button.addEventListener("click", () => {
+      toggleSheet(sheetName);
+    });
+  });
+
   ui.clearLogButton?.addEventListener("click", () => {
     if (!ui.logList) return;
     ui.logList.innerHTML = "";
@@ -279,6 +410,7 @@ function bindEvents() {
   });
 }
 
+initializeSheets();
 bindEvents();
 startTimer();
 updateAttributeDisplay(ui.attributeSelector?.value || "estadoEmocional");

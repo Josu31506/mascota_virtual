@@ -214,6 +214,75 @@ progress::-moz-progress-bar {
   text-align: center;
 }
 
+.mobile-quick-actions {
+  display: none;
+}
+
+.mobile-quick-actions__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.mobile-quick-actions__grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.mobile-quick-actions__button {
+  border: none;
+  border-radius: 20px;
+  padding: 0.9rem 1rem;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  font-weight: 600;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  justify-content: flex-start;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+}
+
+.mobile-quick-actions__button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 30px rgba(139, 105, 79, 0.18);
+}
+
+.mobile-quick-actions__button:focus-visible,
+.sheet-toggle:focus-visible {
+  outline: 3px solid rgba(244, 162, 97, 0.7);
+  outline-offset: 2px;
+}
+
+.mobile-sheet-toggles {
+  display: none;
+}
+
+.sheet-toggle {
+  border: none;
+  border-radius: 999px;
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  background: rgba(244, 162, 97, 0.18);
+  color: var(--color-primary-dark);
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.sheet-toggle[aria-expanded="true"] {
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
+  color: #fff;
+}
+
+.sheet-toggle:active {
+  transform: scale(0.97);
+}
+
 .pet-stage {
   position: relative;
   background: var(--color-stage);
@@ -476,6 +545,57 @@ progress::-moz-progress-bar {
 
   .bottom-dock {
     grid-template-columns: 1fr;
+  }
+
+  .app-shell {
+    padding-bottom: 6rem;
+  }
+
+  .mobile-quick-actions {
+    display: grid;
+    gap: 1rem;
+    width: min(1100px, 92vw);
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: var(--radius-large);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .mobile-quick-actions__grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .mobile-quick-actions__button {
+    justify-content: center;
+  }
+
+  .mobile-sheet-toggles {
+    display: flex;
+    width: min(1100px, 92vw);
+    margin: 0 auto;
+    gap: 0.75rem;
+  }
+
+  .sheet-toggle {
+    flex: 1;
+  }
+
+  [data-sheet].as-sheet {
+    position: fixed;
+    left: 50%;
+    bottom: 1rem;
+    transform: translate(-50%, calc(100% + 1rem));
+    width: min(520px, 92vw);
+    max-height: min(65vh, 520px);
+    overflow: auto;
+    pointer-events: none;
+    z-index: 40;
+  }
+
+  [data-sheet].as-sheet.is-open {
+    transform: translate(-50%, 0);
+    pointer-events: auto;
   }
 }
 
