@@ -306,7 +306,7 @@ export default function App() {
                   </Text>
                 </Pressable>
               );
-            )}
+})}
           </View>
         </View>
       </ImageBackground>

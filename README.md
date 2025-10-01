@@ -25,15 +25,6 @@ npm run start
 
 3. Escanea el código QR con Expo Go o abre el proyecto en un emulador desde la terminal.
 
-## Escenarios y fondos
-
-Coloca las imágenes provistas en la carpeta `assets/scenes/` con los siguientes nombres para que el fondo de cada pestaña se cargue correctamente:
-
-- `scene-sala.png`
-- `scene-dormir.png`
-- `scene-jardin.png`
-
-Puedes subir estos archivos manualmente después de clonar el repositorio; el proyecto incluye únicamente la carpeta vacía para que añadas los recursos oficiales.
 
 ## Endpoints esperados
 
