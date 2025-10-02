@@ -1,8 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  Animated,
+  Dimensions,
   FlatList,
   ImageBackground,
   Modal,
+  PanResponder,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -59,6 +62,78 @@ const DEFAULT_STATUS = {
   felicidad: 80,
   energia: 65,
 };
+
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const STORE_PANEL_WIDTH = Math.min(SCREEN_WIDTH * 0.92, 420);
+
+const WARDROBE_COLLECTIONS = [
+  {
+    id: "coleccion-gala",
+    name: "Colección de gala",
+    description: "Trajes elegantes listos para eventos especiales.",
+    level: "Nv. 5",
+    status: "Disponible",
+    icon: "🎩",
+    accentColor: "#f6c26b",
+    tag: "Elegante",
+    equipped: true,
+  },
+  {
+    id: "coleccion-urbana",
+    name: "Colección urbana",
+    description: "Estilo relajado con toques modernos y vibrantes.",
+    level: "Nv. 3",
+    status: "Nuevo",
+    icon: "🧢",
+    accentColor: "#60a5fa",
+    tag: "Casual",
+    equipped: false,
+  },
+  {
+    id: "coleccion-festival",
+    name: "Colección festival",
+    description: "Accesorios coloridos perfectos para celebraciones.",
+    level: "Nv. 4",
+    status: "Destacado",
+    icon: "🎉",
+    accentColor: "#f472b6",
+    tag: "Festivo",
+    equipped: false,
+  },
+  {
+    id: "coleccion-aventura",
+    name: "Colección aventura",
+    description: "Prendas resistentes para explorar sin límites.",
+    level: "Nv. 2",
+    status: "Disponible",
+    icon: "🎒",
+    accentColor: "#34d399",
+    tag: "Aventura",
+    equipped: false,
+  },
+  {
+    id: "coleccion-retro",
+    name: "Colección retro",
+    description: "Un viaje nostálgico con colores clásicos.",
+    level: "Nv. 6",
+    status: "Limitado",
+    icon: "📼",
+    accentColor: "#f59e0b",
+    tag: "Vintage",
+    equipped: false,
+  },
+  {
+    id: "coleccion-invierno",
+    name: "Colección invierno",
+    description: "Abrigos cálidos y gorros suaves para el frío.",
+    level: "Nv. 1",
+    status: "Disponible",
+    icon: "🧣",
+    accentColor: "#818cf8",
+    tag: "Temporada",
+    equipped: false,
+  },
+];
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
@@ -122,6 +197,26 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [logEntries, setLogEntries] = useState([]);
   const [lastUpdatedAt, setLastUpdatedAt] = useState(null);
+  const [storeOpen, setStoreOpen] = useState(false);
+  const [storeAnimating, setStoreAnimating] = useState(false);
+  const storeProgress = useRef(new Animated.Value(0)).current;
+  const storeTranslateX = useMemo(
+    () =>
+      storeProgress.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-SCREEN_WIDTH, 0],
+      }),
+    [storeProgress]
+  );
+  const storeBackdropOpacity = useMemo(
+    () =>
+      storeProgress.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 0.45],
+      }),
+    [storeProgress]
+  );
+  const showStoreOverlay = storeOpen || storeAnimating;
 
   useEffect(() => {
     refreshStatus();
@@ -133,6 +228,36 @@ export default function App() {
       setActionMenuOpen(false);
     }
   }, [sheetVisible]);
+
+  const openWardrobeStore = useCallback(() => {
+    if (storeOpen || storeAnimating) {
+      return;
+    }
+    setStoreOpen(true);
+    setStoreAnimating(true);
+    Animated.timing(storeProgress, {
+      toValue: 1,
+      duration: 320,
+      useNativeDriver: true,
+    }).start(() => {
+      setStoreAnimating(false);
+    });
+  }, [storeAnimating, storeOpen, storeProgress]);
+
+  const closeWardrobeStore = useCallback(() => {
+    if (!storeOpen || storeAnimating) {
+      return;
+    }
+    setStoreAnimating(true);
+    Animated.timing(storeProgress, {
+      toValue: 0,
+      duration: 280,
+      useNativeDriver: true,
+    }).start(() => {
+      setStoreAnimating(false);
+      setStoreOpen(false);
+    });
+  }, [storeAnimating, storeOpen, storeProgress]);
 
   const selectedSceneConfig = useMemo(() => {
     return (
@@ -158,6 +283,86 @@ export default function App() {
     }
     return null;
   }, [attributeDetails]);
+
+  const wardrobeKeyExtractor = useCallback((item) => item.id, []);
+
+  const renderWardrobeItem = useCallback(({ item }) => {
+    return (
+      <View style={[styles.outfitCard, { borderColor: item.accentColor }]}>
+        <View style={styles.outfitBadgeRow}>
+          <View
+            style={[
+              styles.outfitStatusPill,
+              item.equipped && [
+                styles.outfitStatusPillActive,
+                { backgroundColor: item.accentColor },
+              ],
+            ]}
+          >
+            <Text
+              style={[
+                styles.outfitStatusPillLabel,
+                item.equipped && styles.outfitStatusPillLabelActive,
+              ]}
+            >
+              {item.equipped ? "Equipado" : item.status}
+            </Text>
+          </View>
+          <View style={styles.outfitLevelPill}>
+            <Text style={styles.outfitLevelPillLabel}>{item.level}</Text>
+          </View>
+        </View>
+        <View style={styles.outfitIconWrapper}>
+          <Text style={styles.outfitIcon}>{item.icon}</Text>
+        </View>
+        <Text style={styles.outfitName}>{item.name}</Text>
+        <Text style={styles.outfitDescription} numberOfLines={2}>
+          {item.description}
+        </Text>
+        <View style={styles.outfitTagPill}>
+          <Text style={styles.outfitTagLabel}>{item.tag}</Text>
+        </View>
+      </View>
+    );
+  }, []);
+
+  const openStorePanResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onMoveShouldSetPanResponder: (_event, gestureState) => {
+          if (storeOpen || storeAnimating) {
+            return false;
+          }
+          const horizontalMove = Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
+          return horizontalMove && gestureState.dx > 20;
+        },
+        onPanResponderRelease: (_event, gestureState) => {
+          if (gestureState.dx > 80) {
+            openWardrobeStore();
+          }
+        },
+      }),
+    [openWardrobeStore, storeAnimating, storeOpen]
+  );
+
+  const storePanResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onMoveShouldSetPanResponder: (_event, gestureState) => {
+          if (!storeOpen || storeAnimating) {
+            return false;
+          }
+          const horizontalMove = Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
+          return horizontalMove && gestureState.dx < -20;
+        },
+        onPanResponderRelease: (_event, gestureState) => {
+          if (gestureState.dx < -60) {
+            closeWardrobeStore();
+          }
+        },
+      }),
+    [closeWardrobeStore, storeAnimating, storeOpen]
+  );
 
   const appendLog = useCallback((message) => {
     setLogEntries((current) => [
@@ -257,7 +462,7 @@ export default function App() {
   }, []);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} {...openStorePanResponder.panHandlers}>
       <StatusBar style="light" />
       <ImageBackground
         source={selectedSceneConfig.image}
@@ -527,6 +732,78 @@ export default function App() {
           </View>
         </View>
       </Modal>
+
+      {showStoreOverlay && (
+        <View style={styles.storeOverlay} pointerEvents="box-none">
+          <Animated.View
+            style={[styles.storeScrim, { opacity: storeBackdropOpacity }]}
+            pointerEvents={storeOpen ? "auto" : "none"}
+          >
+            <Pressable
+              accessibilityLabel="Cerrar tienda de atuendos"
+              onPress={closeWardrobeStore}
+              style={styles.storeScrimTouchable}
+            />
+          </Animated.View>
+          <Animated.View
+            style={[styles.storePanel, { transform: [{ translateX: storeTranslateX }] }]}
+            {...storePanResponder.panHandlers}
+          >
+            <SafeAreaView style={styles.storeSafeArea}>
+              <View style={styles.storeContent}>
+                <View style={styles.storeHeader}>
+                  <View style={styles.storeHeaderTopRow}>
+                    <View style={styles.storeTitleGroup}>
+                      <Text style={styles.storeTitle}>Atuendos</Text>
+                      <Text style={styles.storeTitleSubtitle}>
+                        Selecciona tu estilo favorito
+                      </Text>
+                    </View>
+                    <Pressable
+                      accessibilityLabel="Cerrar tienda"
+                      onPress={closeWardrobeStore}
+                      style={styles.storeCloseButton}
+                    >
+                      <Text style={styles.storeCloseButtonLabel}>Cerrar</Text>
+                    </Pressable>
+                  </View>
+                  <View style={styles.storeToolbarRow}>
+                    <View style={styles.storeLabelPill}>
+                      <Text style={styles.storeLabelPillText}>Atuendos</Text>
+                    </View>
+                    <View style={[styles.storeToolbarButton, styles.storeToolbarButtonActive]}>
+                      <View style={styles.storeToolbarIconBubble}>
+                        <Text style={styles.storeToolbarIcon}>🛍️</Text>
+                      </View>
+                      <Text style={styles.storeToolbarButtonLabel}>Shop</Text>
+                    </View>
+                  </View>
+                </View>
+                <FlatList
+                  data={WARDROBE_COLLECTIONS}
+                  keyExtractor={wardrobeKeyExtractor}
+                  renderItem={renderWardrobeItem}
+                  numColumns={2}
+                  columnWrapperStyle={styles.outfitColumnWrapper}
+                  contentContainerStyle={styles.outfitListContent}
+                  showsVerticalScrollIndicator={false}
+                  ListHeaderComponent={
+                    <View style={styles.storeCollectionsHeader}>
+                      <Text style={styles.storeCollectionsTitle}>
+                        Colecciones de vestimenta
+                      </Text>
+                      <Text style={styles.storeCollectionsSubtitle}>
+                        Explora y combina atuendos para tu mascota virtual.
+                      </Text>
+                    </View>
+                  }
+                  ListFooterComponent={<View style={styles.storeFooterSpacer} />}
+                />
+              </View>
+            </SafeAreaView>
+          </Animated.View>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -836,5 +1113,231 @@ const styles = StyleSheet.create({
   logDivider: {
     height: 1,
     backgroundColor: "rgba(148, 163, 184, 0.25)",
+  },
+  storeOverlay: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 20,
+  },
+  storeScrim: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(15, 23, 42, 0.45)",
+  },
+  storeScrimTouchable: {
+    flex: 1,
+  },
+  storePanel: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    width: STORE_PANEL_WIDTH,
+    backgroundColor: "#fff6e4",
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 8 },
+    shadowRadius: 24,
+    elevation: 18,
+  },
+  storeSafeArea: {
+    flex: 1,
+    backgroundColor: "transparent",
+  },
+  storeContent: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 16,
+  },
+  storeHeader: {
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderColor: "rgba(15, 23, 42, 0.08)",
+    marginBottom: 16,
+  },
+  storeHeaderTopRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 12,
+  },
+  storeTitleGroup: {
+    gap: 6,
+  },
+  storeTitle: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#2f1c05",
+  },
+  storeTitleSubtitle: {
+    fontSize: 13,
+    color: "#6b7280",
+  },
+  storeCloseButton: {
+    backgroundColor: "rgba(15, 23, 42, 0.08)",
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 16,
+  },
+  storeCloseButtonLabel: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#1f2933",
+  },
+  storeToolbarRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  storeLabelPill: {
+    backgroundColor: "#fef3c7",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  storeLabelPillText: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: "#b45309",
+  },
+  storeToolbarButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 18,
+    backgroundColor: "rgba(255, 255, 255, 0.75)",
+    borderWidth: 1,
+    borderColor: "rgba(15, 23, 42, 0.08)",
+  },
+  storeToolbarButtonActive: {
+    backgroundColor: "#f6c26b",
+    borderColor: "#f59e0b",
+  },
+  storeToolbarIconBubble: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: "rgba(255, 255, 255, 0.85)",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 8,
+  },
+  storeToolbarIcon: {
+    fontSize: 18,
+  },
+  storeToolbarButtonLabel: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#2f1c05",
+  },
+  storeCollectionsHeader: {
+    marginBottom: 16,
+  },
+  storeCollectionsTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#1f2933",
+  },
+  storeCollectionsSubtitle: {
+    fontSize: 13,
+    color: "#475569",
+    marginTop: 4,
+  },
+  storeFooterSpacer: {
+    height: 40,
+  },
+  outfitListContent: {
+    paddingBottom: 16,
+  },
+  outfitColumnWrapper: {
+    gap: 12,
+  },
+  outfitCard: {
+    flex: 1,
+    backgroundColor: "rgba(255, 255, 255, 0.92)",
+    borderRadius: 20,
+    padding: 16,
+    borderWidth: 1.5,
+  },
+  outfitBadgeRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 12,
+  },
+  outfitStatusPill: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
+    backgroundColor: "rgba(15, 23, 42, 0.08)",
+  },
+  outfitStatusPillActive: {
+    shadowColor: "#f6c26b",
+    shadowOpacity: 0.45,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 4,
+  },
+  outfitStatusPillLabel: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#1f2933",
+  },
+  outfitStatusPillLabelActive: {
+    color: "#2f1c05",
+  },
+  outfitLevelPill: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+    backgroundColor: "rgba(15, 23, 42, 0.08)",
+  },
+  outfitLevelPillLabel: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#1f2933",
+  },
+  outfitIconWrapper: {
+    width: 64,
+    height: 64,
+    borderRadius: 20,
+    backgroundColor: "rgba(15, 23, 42, 0.06)",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 12,
+  },
+  outfitIcon: {
+    fontSize: 36,
+  },
+  outfitName: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#1f2933",
+    marginBottom: 6,
+  },
+  outfitDescription: {
+    fontSize: 13,
+    color: "#475569",
+    marginBottom: 12,
+  },
+  outfitTagPill: {
+    alignSelf: "flex-start",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+    backgroundColor: "rgba(15, 23, 42, 0.08)",
+  },
+  outfitTagLabel: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#334155",
   },
 });
